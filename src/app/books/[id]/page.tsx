@@ -8,13 +8,26 @@ interface PageProps {
     params: Promise<{ id: string }>;
 }
 
+// const booksPromise = async (): Promise<BookType[]> => {
+//     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`);
+//     if (!res.ok) {
+//         throw new Error('Failed to Books data fatching.')
+//     }
+//     const data = await res.json();
+//     return data;
+// };
 const booksPromise = async (): Promise<BookType[]> => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`);
-    if (!res.ok) {
-        throw new Error('Failed to Books data fatching.')
+    try {
+
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`,
+        );
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching books data:", error);
+        return [];
     }
-    const data = await res.json();
-    return data;
 };
 
 const BookDetailsPage = async ({ params }: PageProps) => {

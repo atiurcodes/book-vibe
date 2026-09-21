@@ -5,16 +5,29 @@ export interface BookPage {
     prop: BookType[];
 }
 
-const bookPromise = async (): Promise<BookType[]> => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`);
-    if (!res.ok) {
-        throw new Error('Failed to Books data fatching.')
+// const bookPromise = async (): Promise<BookType[]> => {
+//     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`);
+//     if (!res.ok) {
+//         throw new Error('Failed to Books data fatching.')
+//     }
+//     const data = await res.json();
+//     return data;
+// }
+const booksPromise = async (): Promise<BookType[]> => {
+    try {
+
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`,
+        );
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching books data:", error);
+        return [];
     }
-    const data = await res.json();
-    return data;
-}
+};
 const BookPage = async () => {
-    const books = await bookPromise();
+    const books = await booksPromise();
     return (
         <section className='container mx-auto px-4 py-20'>
             <h2 className="text-4xl text-neutral font-semibold text-center py-5">Explore All Books</h2>
